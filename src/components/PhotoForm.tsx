@@ -7,10 +7,10 @@ import { Camera, Upload, CheckCircle, XCircle, X } from "lucide-react";
 import { Button } from "@/components/Button";
 import { getStoresByLocation } from "@/api";
 import { IStoresByLocationsData, IRegisterParticipationData } from "@/types";
-import { handleError } from "@/utils";
+// import { handleError } from "@/utils";
 // import { registerParticipation } from "@/api";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+// import Swal from "sweetalert2";
+// import withReactContent from "sweetalert2-react-content";
 import { CameraModal } from "./CameraModal";
 
 interface ISelectOption {
@@ -24,7 +24,7 @@ interface IProtoFormProps {
 
 const PhotoForm = (props: IProtoFormProps) => {
   const { setIsRegistereduser, doi } = props;
-  const MySwal = withReactContent(Swal);
+  // const MySwal = withReactContent(Swal);
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -46,14 +46,14 @@ const PhotoForm = (props: IProtoFormProps) => {
     photo: null,
   };
 
-  const showErrorAlert = (message: string) => {
-    MySwal.fire({
-      icon: "error",
-      title: "Error en el registro",
-      text: message,
-      confirmButtonText: "Aceptar",
-    });
-  };
+  // const showErrorAlert = (message: string) => {
+  //   MySwal.fire({
+  //     icon: "error",
+  //     title: "Error en el registro",
+  //     text: message,
+  //     confirmButtonText: "Aceptar",
+  //   });
+  // };
 
   const validationSchema = Yup.object().shape({
     // location: Yup.string().required("La sede es obligatoria"),
@@ -95,8 +95,8 @@ const PhotoForm = (props: IProtoFormProps) => {
         }
       } catch (error) {
         console.error("Error en el registro:", error);
-        const errorMessage = handleError(error);
-        showErrorAlert(errorMessage);
+        // const errorMessage = handleError(error);
+        // showErrorAlert(errorMessage);
       } finally {
         setSubmitting(false);
       }
@@ -121,8 +121,8 @@ const PhotoForm = (props: IProtoFormProps) => {
         setLocations(response.data);
       } catch (error) {
         console.error("Error al obtener las ubicaciones:", error);
-        const errorMessage = handleError(error);
-        showErrorAlert(errorMessage);
+        // const errorMessage = handleError(error);
+        // showErrorAlert(errorMessage);
       }
     };
 
@@ -164,8 +164,8 @@ const PhotoForm = (props: IProtoFormProps) => {
         const response = await mockGetStores();
         setStoreOptions(response);
       } catch (error) {
-        const errorMessage = handleError(error);
-        showErrorAlert(errorMessage);
+        // const errorMessage = handleError(error);
+        // showErrorAlert(errorMessage);
       }
     };
 
