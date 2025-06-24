@@ -31,8 +31,8 @@ const PhotoForm = (props: IProtoFormProps) => {
   const [takePhotoOption, setTakePhotoOption] = useState(false);
   const [confirmedImage, setConfirmedImage] = useState(false);
 
-  const [locations, setLocations] = useState<IStoresByLocationsData[]>([]);
-  const [locationOptions, setLocationOptions] = useState<ISelectOption[]>([]);
+  const [, setLocations] = useState<IStoresByLocationsData[]>([]);
+  // const [locationOptions, setLocationOptions] = useState<ISelectOption[]>([]);
   const [storeOptions, setStoreOptions] = useState<ISelectOption[]>([]);
 
   const [photo, setPhoto] = useState<string | null>(null);
@@ -66,7 +66,7 @@ const PhotoForm = (props: IProtoFormProps) => {
   });
 
   const mockRegisterParticipation = async (
-    values: IRegisterParticipationData
+   
   ) => {
     // Simula retardo de red
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -86,7 +86,9 @@ const PhotoForm = (props: IProtoFormProps) => {
 
       try {
         // const response = await registerParticipation(values);
-        const response = await mockRegisterParticipation(values);
+        const response = await mockRegisterParticipation();
+
+        console.log(values);
 
         if (response.status === "success") {
           setIsRegistereduser(true);
@@ -126,6 +128,7 @@ const PhotoForm = (props: IProtoFormProps) => {
 
     fetchLocations();
   }, []);
+
 
   // Efecto para actualizar las opciones de locations
   // useEffect(() => {

@@ -105,7 +105,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
     });
   };
 
-  const mockRegisterParticipant = async (values: IRegisterParticipantData) => {
+  const mockRegisterParticipant = async () => {
     // Simulamos una espera como si fuera una llamada a la API real
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -128,10 +128,10 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
   const form2 = useFormik({
     initialValues: initialData,
     validationSchema: signupSchema,
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
         // const response = await registerParticipant(values);
-        const response = await mockRegisterParticipant(values);
+        const response = await mockRegisterParticipant();
 
         if (response?.status === "success") {
           setIsIdentificationVisible(false);
