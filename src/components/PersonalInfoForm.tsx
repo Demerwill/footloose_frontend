@@ -7,9 +7,9 @@ import { Button } from "@/components/Button";
 import * as Yup from "yup";
 import clsx from "clsx";
 import { IRegisterParticipantData } from "@/types";
-import { handleError } from "@/utils";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+// import { handleError } from "@/utils";
+// import Swal from "sweetalert2";
+// import withReactContent from "sweetalert2-react-content";
 // import { getDocuments } from "@/api";
 
 interface IPersonalInfoFormProps {
@@ -39,7 +39,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
   //   fetchDocuments();
   // }, []);
 
-  const MySwal = withReactContent(Swal);
+  // const MySwal = withReactContent(Swal);
   const {
     doi,
     setIsIdentificationVisible,
@@ -96,14 +96,14 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
     ),
   });
 
-  const showErrorAlert = (message: string) => {
-    MySwal.fire({
-      icon: "error",
-      title: "Error en el registro",
-      text: message,
-      confirmButtonText: "Aceptar",
-    });
-  };
+  // const showErrorAlert = (message: string) => {
+  //   MySwal.fire({
+  //     icon: "error",
+  //     title: "Error en el registro",
+  //     text: message,
+  //     confirmButtonText: "Aceptar",
+  //   });
+  // };
 
   const mockRegisterParticipant = async () => {
     // Simulamos una espera como si fuera una llamada a la API real
@@ -138,12 +138,12 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
           setIsPersonalInfoVisible(false);
           setIsPhotoformVisible(true);
         } else {
-          showErrorAlert(response.message);
+          // showErrorAlert(response.message);
         }
       } catch (error) {
         console.error("Error en la verificación del participante:", error);
-        const errorMessage = handleError(error);
-        showErrorAlert(errorMessage);
+        // const errorMessage = handleError(error);
+        // showErrorAlert(errorMessage);
       }
     },
   });
