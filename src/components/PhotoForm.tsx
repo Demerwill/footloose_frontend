@@ -8,7 +8,7 @@ import { Button } from "@/components/Button";
 import { getStoresByLocation } from "@/api";
 import { IStoresByLocationsData, IRegisterParticipationData } from "@/types";
 import { handleError } from "@/utils";
-import { registerParticipation } from "@/api";
+// import { registerParticipation } from "@/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { CameraModal } from "./CameraModal";
@@ -56,7 +56,7 @@ const PhotoForm = (props: IProtoFormProps) => {
   };
 
   const validationSchema = Yup.object().shape({
-    location: Yup.string().required("La sede es obligatoria"),
+    // location: Yup.string().required("La sede es obligatoria"),
     store: Yup.string().required("La tienda es obligatoria"),
     amount: Yup.number()
       .typeError("Debe ser un número")
@@ -65,6 +65,19 @@ const PhotoForm = (props: IProtoFormProps) => {
     photo: Yup.mixed().required("La foto de la compra es obligatoria"),
   });
 
+  const mockRegisterParticipation = async (
+    values: IRegisterParticipationData
+  ) => {
+    // Simula retardo de red
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Puedes usar lógica condicional si deseas simular fallos aleatorios
+    return {
+      status: "success",
+      message: "Participación registrada exitosamente.",
+    };
+  };
+
   const form3 = useFormik({
     initialValues,
     validationSchema,
@@ -72,7 +85,8 @@ const PhotoForm = (props: IProtoFormProps) => {
       setSubmitting(true);
 
       try {
-        const response = await registerParticipation(values);
+        // const response = await registerParticipation(values);
+        const response = await mockRegisterParticipation(values);
 
         if (response.status === "success") {
           setIsRegistereduser(true);
@@ -86,6 +100,17 @@ const PhotoForm = (props: IProtoFormProps) => {
       }
     },
   });
+
+  const mockGetStores = async (): Promise<ISelectOption[]> => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    return [
+      { value: "store1", label: "Tienda A" },
+      { value: "store2", label: "Tienda B" },
+      { value: "store3", label: "Tienda C" },
+      { value: "store4", label: "Tienda D" },
+    ];
+  };
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -103,32 +128,46 @@ const PhotoForm = (props: IProtoFormProps) => {
   }, []);
 
   // Efecto para actualizar las opciones de locations
-  useEffect(() => {
-    if (locations) {
-      setLocationOptions(
-        locations.map((location) => ({
-          value: location.id,
-          label: location.name,
-        }))
-      );
-    } else {
-      setLocationOptions([]);
-    }
-  }, [locations]);
+  // useEffect(() => {
+  //   if (locations) {
+  //     setLocationOptions(
+  //       locations.map((location) => ({
+  //         value: location.id,
+  //         label: location.name,
+  //       }))
+  //     );
+  //   } else {
+  //     setLocationOptions([]);
+  //   }
+  // }, [locations]);
 
   // Efecto para actualizar las opciones de stores según la location seleccionada
+  // useEffect(() => {
+  //   if (form3.values.location) {
+  //     const stores =
+  //       locations.find((location) => location.id === form3.values.location)
+  //         ?.stores ?? [];
+  //     setStoreOptions(
+  //       stores.map((store) => ({ value: store.id, label: store.name }))
+  //     );
+  //   } else {
+  //     setStoreOptions([]);
+  //   }
+  // }, [form3.values.location, locations]);
+
   useEffect(() => {
-    if (form3.values.location) {
-      const stores =
-        locations.find((location) => location.id === form3.values.location)
-          ?.stores ?? [];
-      setStoreOptions(
-        stores.map((store) => ({ value: store.id, label: store.name }))
-      );
-    } else {
-      setStoreOptions([]);
-    }
-  }, [form3.values.location, locations]);
+    const fetchStores = async () => {
+      try {
+        const response = await mockGetStores();
+        setStoreOptions(response);
+      } catch (error) {
+        const errorMessage = handleError(error);
+        showErrorAlert(errorMessage);
+      }
+    };
+
+    fetchStores();
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTakePhotoOption(false);
@@ -172,10 +211,10 @@ const PhotoForm = (props: IProtoFormProps) => {
     return fileName;
   };
 
-  const handleLocationChange = (selectedOption: SingleValue<ISelectOption>) => {
-    form3.setFieldValue("location", selectedOption?.value || "");
-    form3.setFieldValue("store", "");
-  };
+  // const handleLocationChange = (selectedOption: SingleValue<ISelectOption>) => {
+  //   form3.setFieldValue("location", selectedOption?.value || "");
+  //   form3.setFieldValue("store", "");
+  // };
 
   const handleStoreChange = (selectedOption: SingleValue<ISelectOption>) => {
     form3.setFieldValue("store", selectedOption?.value || "");
@@ -232,7 +271,7 @@ const PhotoForm = (props: IProtoFormProps) => {
           1.- ¿Dónde realizaste tus compras?
         </label>
         {/* location */}
-        <div className="flex flex-col gap-1">
+        {/* <div className="flex flex-col gap-1">
           <label className="text-[#070707] font-semibold text-lg ">Sede</label>
           <Select
             options={locationOptions}
@@ -245,9 +284,9 @@ const PhotoForm = (props: IProtoFormProps) => {
               {form3.errors.location}
             </span>
           )}
-        </div>
+        </div> */}
 
-        {/* store */}
+        {/* stores */}
         <div className="flex flex-col gap-1 mt-4">
           <label className="text-[#070707] font-semibold text-lg ">
             Tienda
@@ -256,7 +295,6 @@ const PhotoForm = (props: IProtoFormProps) => {
             options={storeOptions}
             onChange={handleStoreChange}
             placeholder="Seleccione una tienda"
-            isDisabled={!form3.values.location}
             noOptionsMessage={() => "No hay opciones disponibles"}
           />
           {form3.touched.store && form3.errors.store && (

@@ -22,10 +22,9 @@ const StyledButton = styled.button`
     transform: translateX(-50%);
     width: 317px;
     height: 4px;
-    background-image: url("/linea.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+
+    background-image: linear-gradient(to left, #df3442, #191919);
+    border-radius: 9999px;
   }
 `;
 

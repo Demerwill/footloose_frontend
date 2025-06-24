@@ -6,7 +6,7 @@ import { ILoginData } from "@/types";
 import { PersonalInfoForm, PhotoForm } from "@/components";
 import { ConfirmatioMessaje } from "@/components";
 import { Button } from "@/components/Button";
-import { verifyParticipant } from "@/api";
+// import { verifyParticipant } from "@/api";
 import { handleError } from "@/utils";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -54,13 +54,31 @@ const Login = () => {
     });
   };
 
+  const mockVerifyParticipant = async (doi: string) => {
+    // Simular un pequeño retardo como si fuera una llamada real
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    const lastChar = doi.slice(-1); // último caracter
+
+    // Simular respuesta del backend
+    return {
+      status: "success",
+      data: {
+        isRegistered: parseInt(lastChar) % 2 === 0, // registrado si termina en número par
+      },
+      message: "Participante verificado correctamente",
+    };
+  };
+
   const form = useFormik({
     initialValues: initialData,
     validationSchema: signupSchema,
     onSubmit: async (values) => {
       try {
         // Llamada a la API para verificar al participante
-        const response = await verifyParticipant(values.doi);
+        // const response = await verifyParticipant(values.doi);
+
+        const response = await mockVerifyParticipant(values.doi);
 
         if (response.status === "success") {
           if (response.data.isRegistered === true) {
@@ -71,6 +89,14 @@ const Login = () => {
           } else {
             // Si aun no esta registrado entonces debe registrarse
             setIsPersonalInfoVisible(true);
+
+            // Esperar un pequeño tiempo para asegurar que el componente se haya renderizado
+            setTimeout(() => {
+              const target = document.getElementById("submit-button");
+              if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }, 100); 
           }
         }
 
@@ -96,15 +122,12 @@ const Login = () => {
       <section
         className="relative w-full max-w-[428px] h-auto bg-cover bg-center bg-no-repeat mx-auto"
         style={{
-          backgroundImage: "url('/header.png')",
+          backgroundImage: "url('/header1.png')",
           aspectRatio: "428 / 280",
+          backgroundPosition: "left center",
         }} // Mantiene la proporción
       >
-        <div className="flex justify-center items-center mt-4">
-          <img src="/logo.png" alt="La Rambla" className="w-[178px] h-[68px]" />
-        </div>
-
-        <div className="absolute bottom-0 left-4 w-[145px] h-[9px] bg-[#F73F96]"></div>
+        <div className="absolute bottom-0 left-4 w-[145px] h-[9px] bg-[#DF3442]"></div>
       </section>
 
       {/* 1.Identificación */}
@@ -112,7 +135,7 @@ const Login = () => {
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
           {/* Nabvar */}
           <div className="flex items-center justify-center gap-5 my-4">
-            {/* Paso 2: Formulario */}
+            {/* Paso 1: Formulario */}
             <div className="flex justify-center items-center gap-2">
               <div
                 className={`font-bold flex items-center justify-center w-9 h-9 rounded-full 
@@ -127,7 +150,7 @@ const Login = () => {
                     isPhotoformVisible ? "text-[#CACACA]" : "text-white"
                   }`}
                 >
-                  2
+                  1
                 </span>
               </div>
               <span
@@ -139,7 +162,7 @@ const Login = () => {
               </span>
             </div>
 
-            {/* Paso 3: Foto */}
+            {/* Paso 2: Foto */}
             <div className="flex justify-center items-center gap-2">
               <div
                 className={`font-bold flex items-center justify-center w-9 h-9 rounded-full 
@@ -154,7 +177,7 @@ const Login = () => {
                     isPhotoformVisible ? "text-white" : "text-[#CACACA]"
                   }`}
                 >
-                  3
+                  2
                 </span>
               </div>
               <span
@@ -172,8 +195,8 @@ const Login = () => {
               {/* TITLE */}
               <div className="flex justify-center items-center mb-4 mt-8">
                 <div className="flex justify-center items-center w-[320px]">
-                  <span className="text-center text-[32px] font-Zilla text-[#6B8946] font-bold leading-[38.4px]">
-                    ¡La Rambla te devuelve hasta S/500 de tu lista escolar!
+                  <span className="text-center text-[32px] font-Zilla text-[#381554] font-bold leading-[38.4px]">
+                    ¡Footloose te premia por cada compra estas fiestas!
                   </span>
                 </div>
               </div>
@@ -182,16 +205,11 @@ const Login = () => {
               <div className="flex justify-center items-center">
                 <div className="flex w-[330px]">
                   <span className="text-center text-lg text-[#070707] font-medium leading-[17.4px]">
-                    Llena tus datos, sube la foto de tu voucher y ¡listo!
-                    Recuerda que el monto mínimo para participar es de S/200.
+                    Primero realiza tu compra mínima de S/150, luego registra tu
+                    voucher y ¡listo! Ya estarás participando. Recuerda que solo
+                    aplica una vez por ticket.
                   </span>
                 </div>
-              </div>
-
-              <div className="flex justify-center items-center mt-4">
-                <span className="text-center  text-[#070707] font-normal leading-[17.4px]">
-                  *Solo participan marcas autorizadas
-                </span>
               </div>
 
               {/* FORM DE REGISTRO */}
@@ -233,7 +251,10 @@ const Login = () => {
                 {/* En of doi input */}
 
                 {/* Botón de Enviar */}
-                <div className="flex flex-col gap-2 mt-8 w-full mb-4">
+                <div
+                  id="submit-button"
+                  className="flex flex-col gap-2 mt-8 w-full mb-4"
+                >
                   <Button form={form} buttonText="Continuar" />
                 </div>
               </form>
@@ -255,7 +276,7 @@ const Login = () => {
             <>
               {/* TITLE */}
               <div className="flex justify-center items-center mb-4 mt-8 w-full">
-                <span className="text-center text-[32px] font-Zilla text-[#6B8946] font-bold leading-[38.4px] max-w-[302px]">
+                <span className="text-center text-[32px] font-Zilla text-[#45235E] font-bold leading-[38.4px] max-w-[302px]">
                   ¡Sube aquí la foto de tu compra!
                 </span>
               </div>

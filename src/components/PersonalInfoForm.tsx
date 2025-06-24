@@ -1,16 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/Button";
-import { registerParticipant } from "@/api";
+// import { registerParticipant } from "@/api";
 import * as Yup from "yup";
 import clsx from "clsx";
 import { IRegisterParticipantData } from "@/types";
 import { handleError } from "@/utils";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { getDocuments } from "@/api";
+// import { getDocuments } from "@/api";
 
 interface IPersonalInfoFormProps {
   doi: string;
@@ -20,24 +20,24 @@ interface IPersonalInfoFormProps {
 }
 
 const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
-  const [documents, setDocuments] = useState<{
-    policy_file: string;
-    terms_file: string;
-    marketing_file: string;
-  } | null>(null);
+  // const [documents, setDocuments] = useState<{
+  //   policy_file: string;
+  //   terms_file: string;
+  //   marketing_file: string;
+  // } | null>(null);
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const response = await getDocuments();
-        setDocuments(response.data);
-      } catch (err) {
-        console.error("No se pudieron obtener los documentos.");
-      }
-    };
+  // useEffect(() => {
+  //   const fetchDocuments = async () => {
+  //     try {
+  //       const response = await getDocuments();
+  //       setDocuments(response.data);
+  //     } catch (err) {
+  //       console.error("No se pudieron obtener los documentos.");
+  //     }
+  //   };
 
-    fetchDocuments();
-  }, []);
+  //   fetchDocuments();
+  // }, []);
 
   const MySwal = withReactContent(Swal);
   const {
@@ -105,12 +105,33 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
     });
   };
 
+  const mockRegisterParticipant = async (values: IRegisterParticipantData) => {
+    // Simulamos una espera como si fuera una llamada a la API real
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Puedes cambiar esta lógica para forzar errores o éxitos
+    const shouldSucceed = true;
+
+    if (shouldSucceed) {
+      return {
+        status: "success",
+        message: "Registro exitoso",
+      };
+    } else {
+      return {
+        status: "error",
+        message: "Algo salió mal en el registro.",
+      };
+    }
+  };
+
   const form2 = useFormik({
     initialValues: initialData,
     validationSchema: signupSchema,
     onSubmit: async (values) => {
       try {
-        const response = await registerParticipant(values);
+        // const response = await registerParticipant(values);
+        const response = await mockRegisterParticipant(values);
 
         if (response?.status === "success") {
           setIsIdentificationVisible(false);
@@ -139,7 +160,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
       </div>
 
       {/* Título */}
-      <h2 className="text-4xl font-bold text-center text-[#00B7B2] leading-[38.4px] mb-8">
+      <h2 className="text-4xl font-bold text-center text-[#DF3442] leading-[38.4px] mb-8">
         ¡No te olvides de completar estos datos!
       </h2>
 
@@ -167,6 +188,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
           <label className="text-sm font-semibold">Nombres</label>
           <input
             type="text"
+            placeholder="Ingresa tu nombre"
             {...form2.getFieldProps("firstName")}
             className={clsx(
               "form-control px-3 py-2 border rounded-md w-full outline-none",
@@ -187,6 +209,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
           <label className="text-sm font-semibold">Apellidos</label>
           <input
             type="text"
+            placeholder="Ingresa tus apellidos"
             {...form2.getFieldProps("lastName")}
             className={clsx(
               "form-control px-3 py-2 border rounded-md w-full outline-none",
@@ -207,6 +230,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
           <label className="text-sm font-semibold">Correo Electrónico</label>
           <input
             type="email"
+            placeholder="Ingresa tu correo electrónico"
             {...form2.getFieldProps("email")}
             className={clsx(
               "form-control px-3 py-2 border rounded-md w-full outline-none bg-white",
@@ -225,6 +249,7 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
           <label className="text-sm font-semibold">Número de Celular</label>
           <input
             type="text"
+            placeholder="Ingresa tu número de celular"
             {...form2.getFieldProps("phone")}
             className={clsx(
               "form-control px-3 py-2 border rounded-md w-full outline-none",
@@ -249,7 +274,8 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
             <span className="text-sm">
               Acepto las{" "}
               <a
-                href={documents?.policy_file || "#"}
+                // href={documents?.policy_file || "#"}
+                href="#"
                 className="font-bold underline"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -273,7 +299,8 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
             <span className="text-sm">
               Acepto los{" "}
               <a
-                href={documents?.terms_file || "#"}
+                // href={documents?.terms_file || "#"}
+                href=""
                 className="font-bold underline"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -297,7 +324,8 @@ const PersonalInfoForm = (props: IPersonalInfoFormProps) => {
             <span className="text-sm">
               Acepto el{" "}
               <a
-                href={documents?.marketing_file || "#"}
+                // href={documents?.marketing_file || "#"}
+                href="#"
                 className="font-bold underline"
                 target="_blank"
                 rel="noopener noreferrer"
